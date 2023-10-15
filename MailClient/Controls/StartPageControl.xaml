@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="MailClient.Controls.StartPageControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vmf="clr-namespace:MailClient.ViewModels"
+             xmlns:local="clr-namespace:MailClient.Controls"
+              xmlns:cf="clr-namespace:MailClient.Converters"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vmf:StartPageControlVM}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <cf:ServiceNameToImageConverter x:Key="NameToImageConverter" />
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Image Source="{Binding SelectedService, Converter={StaticResource NameToImageConverter}}" Width="100" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+        <ContentControl Grid.Row="1" Content ="{Binding CurrentControl}" HorizontalAlignment="Center" VerticalAlignment="Top" />
+
+    </Grid>
+</UserControl>

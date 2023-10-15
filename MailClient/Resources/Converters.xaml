@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:cf="clr-namespace:MailClient.Converters">
+    
+
+    <cf:IsSeenImageConverter x:Key="IsSeenConverter" />
+    <cf:AttachmentToImageConverter x:Key="AttachmentConverter" />
+    <cf:BoolToVisibilityConverter x:Key="VisibilityConverter" />
+    <cf:BoolToForegroundConverter x:Key="ForegroundConverter" />
+    <cf:IsMarkedConverter x:Key="MarkedConverter" />
+    <cf:IsInportantConverter x:Key="ImportantConverter" />
+    <cf:SelectedBackgroundConverter x:Key="SelectedConverter" />
+    <cf:ZeroHideConverter x:Key="ZeroHideConverter" />
+    <cf:ServiceNameToImageConverter x:Key="ServiceToImageConverter" />
+    <cf:BoolToVisibilityHideConverter x:Key="BoolToVisibilityHide" />
+    <cf:BoolToWindowIcon x:Key="WindowIconConverter" />
+  
+
+</ResourceDictionary>

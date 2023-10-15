@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\drafts.png" />
+    <None Remove="Images\hiclipart.com.png" />
+    <None Remove="Images\left-arrow.png" />
+    <None Remove="Images\loading-gif.gif" />
+    <None Remove="Images\move_cloudfolder.png" />
+    <None Remove="Images\of_exitf.png" />
+    <None Remove="Images\reload.png" />
+    <None Remove="Images\sign-out.png" />
+    <None Remove="Images\spam.png" />
+    <None Remove="Images\trash.png" />
+    <None Remove="Images\window_close.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\move_cloudfolder.png" />
+    <Resource Include="Images\of_exitf.png" />
+    <Resource Include="Images\reload.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\sign-out.png" />
+    <Resource Include="Images\spam.png" />
+    <Resource Include="Images\trash.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.2.0" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\drafts.png" />
+    <Resource Include="Images\hiclipart.com.png" />
+    <Resource Include="Images\loading-gif.gif" />
+    <Resource Include="Images\window_close.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

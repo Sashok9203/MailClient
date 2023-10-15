@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:MailClient"
+                    xmlns:vmf="clr-namespace:MailClient.ViewModels"
+                    xmlns:cvf="clr-namespace:MailClient.Controls">
+    
+    <DataTemplate DataType="{x:Type vmf:MailListControlVM}">
+        <cvf:MailListControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmf:WaitLoadControlVM}">
+        <cvf:WaitLoadControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmf:StartPageControlVM}">
+        <cvf:StartPageControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmf:MailClientControlVM}">
+        <cvf:MailClientControl/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmf:AuthorizationControlVM}">
+        <cvf:AuthorizationControl/>
+    </DataTemplate>
+    
+</ResourceDictionary>
