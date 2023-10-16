@@ -39,7 +39,8 @@ namespace MailClient.ViewModels
                      isMailViewerWindowOpen;
         private bool? gCheck = false;
         public static bool isWindowFull;
-        private string newFolderName = string.Empty;
+        private string newFolderName = string.Empty,
+                       newMessageTo = string.Empty;
 
         private bool? groupCheck
         {
@@ -73,7 +74,10 @@ namespace MailClient.ViewModels
 
         private void newMail()
         {
+            if (SelectedToViewMessage != null)
+                NewMessageTo = SelectedToViewMessage.Message.From[0].ToString();
             IsNewMailWindowOpen = true;
+
         }
 
         private async void folderSubscribe(IMailFolder folder)
@@ -585,6 +589,18 @@ namespace MailClient.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public string NewMessageTo
+        {
+            get => newMessageTo;
+            set 
+            {
+                newMessageTo = value;
+                OnPropertyChanged();
+            }
+        }
+        public string NewMessageSubject { get; set; }
+        public string NewMessageMessage { get; set; }
 
         public MessageVM SelectedToViewMessage
         {

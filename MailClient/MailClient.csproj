@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\attachment.png" />
     <None Remove="Images\download_file.png" />
     <None Remove="Images\drafts.png" />
     <None Remove="Images\hiclipart.com.png" />
@@ -24,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\attachment.png" />
     <Resource Include="Images\download_file.png" />
     <Resource Include="Images\leftarrow.png" />
     <Resource Include="Images\move_cloudfolder.png" />

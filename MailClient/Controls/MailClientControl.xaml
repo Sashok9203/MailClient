@@ -205,6 +205,7 @@
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition/>
                     <RowDefinition  Height="40"/>
                 </Grid.RowDefinitions>
@@ -225,6 +226,30 @@
                         </StackPanel>
                     </DockPanel>
                 </Border>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="1"  Margin="20,0,20,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="To" FontSize="17" Foreground="Gray" Margin="0,0,20,0" />
+                        <TextBox Width="350" Text="{Binding NewMessageTo,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  BorderBrush="Transparent" BorderThickness="0" FontSize="17"  />
+                    </StackPanel>
+                    <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="2"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="2"  Margin="20,0,20,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Subgect" FontSize="17" Foreground="Gray" Margin="0,0,20,0" />
+                        <TextBox  Width="350" Text="{Binding NewMessageSubject,UpdateSourceTrigger=PropertyChanged}"  BorderBrush="Transparent" BorderThickness="0"  FontSize="17" />
+                    </StackPanel>
+                    <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="2"/>
+                </StackPanel>
+                <TextBlock Grid.Row="3"  VerticalAlignment="Center" Text="Message" FontSize="17" Foreground="Gray" Margin="20,0,0,0" />
+                <TextBox  AcceptsReturn ="True" Text="{Binding NewMessageMessage,UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"  Margin="20,0,20,20" Padding="10" Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Right" Margin="0,0,20,10">
+                    <Image Source="/Images/attachment.png" Margin="0,0,20,0">
+                        <Image.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command ="{Binding CloseNewMailWindow}"/>
+                        </Image.InputBindings>
+                    </Image>
+                    <Button Content="Send" FontSize="14" Style="{StaticResource RoundedButtonStyle}" Width="100"/>
+                </StackPanel>
             </Grid>
         </Border>
 
