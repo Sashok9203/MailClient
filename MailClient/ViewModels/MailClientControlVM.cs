@@ -32,6 +32,7 @@ namespace MailClient.ViewModels
         private MessageVM selectedToViewMessage;
         private FolderVM selectedFolder, prevFolder;
         private FolderVM? selectedParent;
+        private MimeMessage newMessage;
         private bool disposedValue,
                      isNewMailWindowOpen, 
                      groupCheckEnabled, 
@@ -72,12 +73,32 @@ namespace MailClient.ViewModels
             Environment.Exit(0);
         }
 
+        private void newMailWindowClose()
+        {
+            IsNewMailWindowOpen = isWindowFull = false;
+           
+        }
+
+
         private void newMail()
         {
             if (SelectedToViewMessage != null)
                 NewMessageTo = SelectedToViewMessage.Message.From[0].ToString();
+            newMessage = new();
+
             IsNewMailWindowOpen = true;
 
+        }
+
+        private void sendNewMessage()
+        {
+            IsNewMailWindowOpen = isWindowFull = false;
+            newMessage = null;
+        }
+
+        private void addMewMessageAttachment()
+        {
+            
         }
 
         private async void folderSubscribe(IMailFolder folder)
@@ -619,7 +640,7 @@ namespace MailClient.ViewModels
         public RelayCommand Logout => new( (o) => LogOut.Invoke());
         public RelayCommand Exit => new((o) => exit());
         public RelayCommand WindowResize => new((o) => IsWindowFull = !IsWindowFull);
-        public RelayCommand CloseNewMailWindow => new((o) =>  IsNewMailWindowOpen = isWindowFull = false);
+        public RelayCommand CloseNewMailWindow => new((o) =>  newMailWindowClose());
         public RelayCommand NewMail => new((o) => newMail());
         public RelayCommand ReloadFolder => new( async (o) => await getMessagesAsync(SelectedFolder.Folder,true), (o) => CurrentControl != UserControls.WaitLoadControl);
         public RelayCommand AddFolder => new((o) => addFolder());
@@ -631,6 +652,8 @@ namespace MailClient.ViewModels
         public RelayCommand MailViewerExit => new((o) => { IsMailViewerWindowOpen = false ; SelectedToViewMessage = null; });
         public RelayCommand DownloadFile => new((o) => saveFile() );
         public RelayCommand Answer => new((o) => { IsMailViewerWindowOpen = false; newMail(); });
+        public RelayCommand SendMewMessage => new((o) => sendNewMessage());
+        public RelayCommand AddMewMessageAttachment => new((o) => addMewMessageAttachment());
 
         public MailClientControlVM()
         {

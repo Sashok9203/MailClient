@@ -245,10 +245,10 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Right" Margin="0,0,20,10">
                     <Image Source="/Images/attachment.png" Margin="0,0,20,0">
                         <Image.InputBindings>
-                            <MouseBinding Gesture="LeftClick" Command ="{Binding CloseNewMailWindow}"/>
+                            <MouseBinding Gesture="LeftClick" Command ="{Binding AddMewMessageAttachment}"/>
                         </Image.InputBindings>
                     </Image>
-                    <Button Content="Send" FontSize="14" Style="{StaticResource RoundedButtonStyle}" Width="100"/>
+                    <Button Content="Send" FontSize="14" Style="{StaticResource RoundedButtonStyle}" Command="{Binding SendMewMessage}" Width="100"/>
                 </StackPanel>
             </Grid>
         </Border>
