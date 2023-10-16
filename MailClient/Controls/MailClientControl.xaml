@@ -95,7 +95,7 @@
                 <StackPanel  Visibility="{Binding ElementName=mainCheck,Path=IsChecked,Converter={StaticResource  BoolToVisibilityHide}}" Orientation="Horizontal"  Height="30">
                     <Image Margin="0,0,25,0" Source="/Images/spam.png" Width="25" >
                         <Image.InputBindings>
-                            <MouseBinding Gesture="LeftClick" Command ="{Binding }"/>
+                            <MouseBinding Gesture="LeftClick" Command ="{Binding MoveMessagesToSpam }"/>
                         </Image.InputBindings>
                     </Image>
                     <Image  Margin="0,0,25,0" Source="/Images/move_cloudfolder.png" Width="25" >

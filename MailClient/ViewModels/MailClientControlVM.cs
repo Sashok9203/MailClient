@@ -5,6 +5,7 @@ using MailKit.Search;
 using MimeKit;
 using Org.BouncyCastle.Asn1.X509;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -178,49 +179,54 @@ namespace MailClient.ViewModels
 
         public async Task getMessagesAsync(IMailFolder path, bool forceReload)
         {
+            groupCheck = false;
             GroupCheck = GroupCheckEnabled = false;
 
-            if (mails[path].Messages != null && !forceReload) return;
-            mails[path].Messages = new();
-           
-            CurrentControl = UserControls.WaitLoadControl;
-            var result = await Task.Run(() =>
+            if (mails[path].Messages == null || forceReload)
             {
-                lock (path.SyncRoot)
-                {
-                    path.Open(FolderAccess.ReadWrite);
-                }
-            }).ContinueWith((o) =>
-            {
-                lock (path.SyncRoot)
-                {
-                    return path.Search(SearchQuery.All);
-                }
-            });
+                mails[path].Messages = new();
 
-            foreach (var id in result)
-            {
-                MessageVM mVM = new();
-                var info = await Task.Run(() =>
+                CurrentControl = UserControls.WaitLoadControl;
+                var result = await Task.Run(() =>
                 {
                     lock (path.SyncRoot)
                     {
-                        var res = path.Fetch(new[] { id }, MessageSummaryItems.Flags | MessageSummaryItems.GMailLabels);
-                        mVM.Message = path.GetMessage(id);
-                        return res;
+                        path.Open(FolderAccess.ReadWrite);
+                    }
+                }).ContinueWith((o) =>
+                {
+                    lock (path.SyncRoot)
+                    {
+                        return path.Search(SearchQuery.All);
                     }
                 });
-                mVM.IsSeen = info[0]?.Flags.Value.HasFlag(MessageFlags.Seen) ?? false;
-                mVM.Flagget = info[0]?.Flags.Value.HasFlag(MessageFlags.Flagged) ?? false;
-                mVM.Importance = info[0].GMailLabels?.Contains("Important") ?? false;
 
-                mVM.UniqueId = id;
-                mVM.Attachment = mVM.Message.Attachments.Any();
-                mails[path].Messages?.Add(mVM);
+                foreach (var id in result)
+                {
+                    MessageVM mVM = new();
+                    var info = await Task.Run(() =>
+                    {
+                        lock (path.SyncRoot)
+                        {
+                            var res = path.Fetch(new[] { id }, MessageSummaryItems.Flags | MessageSummaryItems.GMailLabels);
+                            mVM.Message = path.GetMessage(id);
+                            return res;
+                        }
+                    });
+                    mVM.IsSeen = info[0]?.Flags.Value.HasFlag(MessageFlags.Seen) ?? false;
+                    mVM.Flagget = info[0]?.Flags.Value.HasFlag(MessageFlags.Flagged) ?? false;
+                    mVM.Importance = info[0].GMailLabels?.Contains("Important") ?? false;
+
+                    mVM.UniqueId = id;
+                    mVM.Attachment = mVM.Message.Attachments.Any();
+                    mails[path].Messages?.Add(mVM);
+                }
             }
-           
-            CurrentControl = UserControls.MailListControl;
             GroupCheckEnabled = true;
+            foreach (var item in mails.Select(y => y.Value))
+                item.UnreadApdateAsync();
+            CurrentControl = UserControls.MailListControl;
+           
         }
 
         private async Task selectFolderAsync(object o)
@@ -295,10 +301,42 @@ namespace MailClient.ViewModels
             }
         }
 
+        private async Task moveMessagesToSpam()
+        {
+            var messsges = SelectedFolder?.Messages?.Where(x => x.IsChecked).ToArray();
+            var spamFolder = mails.Values.FirstOrDefault(x => x.LocalName == LocalFolder.Junk);
+            foreach (var item in messsges)
+            {
+                spamFolder?.Messages?.Add(item);
+                await SelectedFolder.Folder.MoveToAsync(item.UniqueId, spamFolder.Folder);
+            }
+            var folders = mails.Where(x => x.Value.LocalName != LocalFolder.Junk).Select(y => y.Value);
+            remodeMessagesFromFolders(folders, messsges);
+        }
+
+        private void remodeMessagesFromFolders(IEnumerable<FolderVM> folders, IEnumerable<MessageVM> messages)
+        {
+            foreach (var folder in folders)
+            {
+                foreach (var item in messages)
+                {
+                    var delMessage = folder?.Messages?.FirstOrDefault(x => x.Message.MessageId == item.Message.MessageId);
+                    if (delMessage != null)
+                        folder?.Messages?.Remove(delMessage);
+                }
+            }
+            foreach (var item in mails.Select(y => y.Value))
+                item.UnreadApdateAsync();
+            mailChecked();
+            OnPropertyChanged(nameof(GroupCheck));
+        }
+
+
         private async Task deleteMessages()
         {
             var messsges = SelectedFolder?.Messages?.Where(x => x.IsChecked).ToArray();
             IEnumerable<FolderVM>? folders = null;
+            if (!SelectedFolder.Folder.IsOpen) SelectedFolder.Folder.Open( FolderAccess.ReadWrite);
             if (SelectedFolder.LocalName != LocalFolder.Trash)
             {
                 var trashFolder = mails.Values.FirstOrDefault(x => x.LocalName == LocalFolder.Trash);
@@ -321,20 +359,7 @@ namespace MailClient.ViewModels
                 }
                 folders = mails.Select(y => y.Value);
             }
-
-            foreach (var folder in folders)
-            {
-                foreach (var item in messsges)
-                {
-                    var delMessage = folder?.Messages?.FirstOrDefault(x => x.Message.MessageId == item.Message.MessageId);
-                    if (delMessage != null)
-                        folder?.Messages?.Remove(delMessage);
-                }
-            }
-            foreach (var item in mails.Select(y => y.Value))
-                item.UnreadApdateAsync();
-            mailChecked();
-            OnPropertyChanged(nameof(GroupCheck));
+            remodeMessagesFromFolders(folders, messsges);
         }
         
 
@@ -355,11 +380,8 @@ namespace MailClient.ViewModels
 
             if ((emailClient.Capabilities & (ImapCapabilities.SpecialUse | ImapCapabilities.XList)) != 0)
             {
-                IMailFolder folder = emailClient.GetFolder(SpecialFolder.All);
-                if (folder != null)
-                    mails.Add(folder, new(folder, LocalFolder.All) { Icon = Resource.all });
                 
-                folder = emailClient.Inbox;
+                IMailFolder folder = emailClient.Inbox;
                 mails.Add(folder, new(folder, LocalFolder.Inbox) { Icon = Resource.inbox });
 
 
@@ -390,6 +412,11 @@ namespace MailClient.ViewModels
                 folder = emailClient.GetFolder(SpecialFolder.Junk);
                 if (folder != null)
                     mails.Add(folder, new(folder, LocalFolder.Junk) { Icon = Resource.spam });
+
+                folder = emailClient.GetFolder(SpecialFolder.All);
+                if (folder != null)
+
+                    mails.Add(folder, new(folder, LocalFolder.All) { Icon = Resource.all });
                 foreach (var item in Folders)
                     folderSubscribe(item.Folder);
             }
@@ -523,6 +550,7 @@ namespace MailClient.ViewModels
         public RelayCommand Cancel => new((o) => IsCreateNewFolderWindoOpen = false);
         public RelayCommand DeleteFolder => new((o) => deleteFolder(o), (o) => o is FolderVM folder && folder != SelectedFolder && folder.LocalName == LocalFolder.User);
         public RelayCommand DeleteMessages => new(async (o) =>await deleteMessages(), (o) => GroupCheck != false);
+        public RelayCommand MoveMessagesToSpam => new(async (o) => await moveMessagesToSpam(), (o) => GroupCheck != false && SelectedFolder.LocalName != LocalFolder.Junk);
 
         public MailClientControlVM()
         {

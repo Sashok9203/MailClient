@@ -99,6 +99,7 @@ namespace MailClient.ViewModels
                     folders = MailsBox.Select(y => y.Value);
                 }
                 deleteMailFromFolders(folders, message.Message.MessageId);
+                MailHasChecked.Invoke();
             }
         }
 
@@ -166,9 +167,11 @@ namespace MailClient.ViewModels
                     MessageFlags.UserDefined => throw new NotImplementedException(),
                     _ => throw new NotImplementedException(),
                 };
+               
                 lock (CurrentFolder.Folder.SyncRoot)
                 {
-                    if (condition)
+                    if (!CurrentFolder.Folder.IsOpen) CurrentFolder.Folder.Open( FolderAccess.ReadWrite);
+                        if (condition)
                         CurrentFolder.Folder.RemoveFlags(message.UniqueId, flag, HasEnableExt);
                     else
                         CurrentFolder.Folder.AddFlags(message.UniqueId, flag, HasEnableExt);
