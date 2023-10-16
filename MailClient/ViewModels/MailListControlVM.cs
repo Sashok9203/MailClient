@@ -24,7 +24,11 @@ namespace MailClient.ViewModels
         {
             if (o is MessageVM message)
             {
-                seenInvert(message);
+                CurrentFolder.Folder.AddFlags(message.UniqueId,  MessageFlags.Seen,false);
+                message.IsSeen = true;
+                foreach (var item in MailsBox.Values)
+                    item.UnreadApdateAsync();
+                SetFlagsAllMessage(MessageFlags.Seen, message.Message.MessageId, message.IsSeen);
                 MailSelected.Invoke(message);
             }
         }

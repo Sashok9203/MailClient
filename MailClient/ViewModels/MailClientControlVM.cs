@@ -2,6 +2,7 @@
 using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;
+using Microsoft.Win32;
 using MimeKit;
 using Org.BouncyCastle.Asn1.X509;
 using System;
@@ -9,7 +10,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Printing;
 using System.Security.Policy;
 using System.Text;
@@ -373,8 +376,32 @@ namespace MailClient.ViewModels
             }
             remodeMessagesFromFolders(folders, messsges);
         }
-        
 
+        private void saveFile()
+        {
+            SaveFileDialog sfd = new()
+            {
+                FileName = SlectedFileName
+            };
+            if (sfd.ShowDialog() == true)
+            {
+                string path = sfd.FileName;
+                var attachment = SelectedToViewMessage.Message.Attachments.FirstOrDefault(x => x.ContentDisposition.FileName == SlectedFileName);
+                using var stream = File.Create(path);
+                if (attachment is MessagePart)
+                {
+                    var part = (MessagePart)attachment;
+
+                    part.Message.WriteTo(stream);
+                }
+                else
+                {
+                    var part = (MimePart)attachment;
+
+                    part.Content.DecodeTo(stream);
+                }
+            }
+        }
 
         private void newFolder()
         {
@@ -535,6 +562,8 @@ namespace MailClient.ViewModels
             }
         }
 
+        public string SlectedFileName { get; set; }
+        
 
         public IEnumerable<FolderVM> ParentFolders => mails.Values.Where(x=>x.LocalName == LocalFolder.User);
 
@@ -583,7 +612,10 @@ namespace MailClient.ViewModels
         public RelayCommand DeleteFolder => new((o) => deleteFolder(o), (o) => o is FolderVM folder && folder != SelectedFolder && folder.LocalName == LocalFolder.User);
         public RelayCommand DeleteMessages => new(async (o) =>await deleteMessages(), (o) => GroupCheck != false);
         public RelayCommand MoveMessagesToSpam => new(async (o) => await moveMessagesToSpam(), (o) => GroupCheck != false && SelectedFolder.LocalName != LocalFolder.Junk);
-        public RelayCommand MailViewerExit => new((o) => IsMailViewerWindowOpen = false);
+        public RelayCommand MailViewerExit => new((o) => { IsMailViewerWindowOpen = false ; SelectedToViewMessage = null; });
+        public RelayCommand DownloadFile => new((o) => saveFile() );
+        public RelayCommand Answer => new((o) => { IsMailViewerWindowOpen = false; newMail(); });
+
         public MailClientControlVM()
         {
             UserControls.WaitLoadControl.LoadingText = "Loading messages...";

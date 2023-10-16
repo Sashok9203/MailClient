@@ -127,6 +127,7 @@
                     <RowDefinition Height="40"/>
                     <RowDefinition  Height="2.5*"/>
                     <RowDefinition />
+                    <RowDefinition  Height="60"/>
 
                 </Grid.RowDefinitions>
                 <Image Margin="20,10,0,0"  Width="17" Source="/Images/leftarrow.png" HorizontalAlignment="Left">
@@ -168,16 +169,30 @@
                 <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" Grid.Row="6"  Margin="20,0,20,0"
                             Visibility="{Binding SelectedToViewMessage.Message.Attachments,Converter={StaticResource NullToVisibilityConverter}}">
                     <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="2"/>
-                    
                     <TextBlock Text="Attachments" FontSize="17" Foreground="Gray" Margin="0,0,20,0" />
-                    <ListView FontSize="15" Foreground="LightGray" VerticalContentAlignment="Center" HorizontalAlignment="Left" 
-                              Background="Transparent" BorderBrush="Transparent" BorderThickness="0"
-                              ItemsSource="{Binding AttachmentFiles}" SelectedItem="{Binding SlectedFileName}"/>
-
-
-
+                    <ListView VerticalContentAlignment="Center" HorizontalAlignment="Left"  Background="Transparent"
+                              BorderBrush="Transparent" BorderThickness="0" ItemsSource="{Binding AttachmentFiles}"
+                              SelectedItem="{Binding SlectedFileName}" SelectedIndex="0">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Left" Height="30">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="40"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock  Text="{Binding}" FontSize="15" Foreground="LightGray" VerticalAlignment="Center"/>
+                                    <Image  Grid.Column="1"  Width="20" Source="/Images/download_file.png" >
+                                        <Image.InputBindings>
+                                            <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.DownloadFile ,Source={x:Reference mailClientControl}}"/>
+                                        </Image.InputBindings>
+                                    </Image>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
                 </StackPanel>
+                <Button Grid.Row="7" Width="100" Command="{Binding Answer}" Margin="0,0,20,20" HorizontalAlignment="Right" FontSize="15" Style="{StaticResource RoundedButtonStyle}" Content="Answer"/>
             </Grid>
         </Border>
 
