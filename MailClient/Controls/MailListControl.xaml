@@ -26,56 +26,58 @@
 
         
     </UserControl.Resources>
-    
-    <ScrollViewer Style="{StaticResource  FavsScrollViewerRight}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <ItemsControl  Padding="25"  HorizontalContentAlignment="Stretch" ItemsSource="{Binding Messages}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border x:Name="mainBorder" Padding="5" Style="{StaticResource trigeredBorder}" BorderThickness ="1" Height="50"   CornerRadius="6" Margin="5">
-                        <DockPanel LastChildFill="True" >
-                            <CheckBox DockPanel.Dock="Left" Command="{Binding DataContext.MailChecked ,Source={x:Reference mailListControl}}" IsChecked="{Binding IsChecked}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0"/>
-                            <Image DockPanel.Dock="Left" Source="{Binding Flagget ,Converter={StaticResource  MarkedConverter}}" Width="15" Margin="15,0,0,0" >
-                                <Image.InputBindings>
-                                    <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.FlaggetInvert ,Source={x:Reference mailListControl}}" CommandParameter="{Binding}"/>
-                                </Image.InputBindings>
-                            </Image>
-                            <Image DockPanel.Dock="Left" Source="{Binding Importance , Converter={StaticResource  ImportantConverter}}" Width="15" Margin="15,0,0,0" >
-                                <Image.InputBindings>
-                                    <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.ImportanceInvert ,Source={x:Reference mailListControl}}" CommandParameter="{Binding }"/>
-                                </Image.InputBindings>
-                            </Image>
-                            <TextBlock Text="{Binding Message.From}" Margin="20,0,0,5" FontSize="14" Foreground="{Binding IsSeen ,Converter={StaticResource ForegroundConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Message.Subject}" Margin="20,0,0,5" FontSize="14" Foreground="{Binding IsSeen ,Converter={StaticResource ForegroundConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <StackPanel DockPanel.Dock="Left" Visibility="{Binding ElementName=mainBorder ,Path=IsMouseOver,Converter={StaticResource VisibilityConverter}}" Orientation="Horizontal"  Margin="20,3,0,3">
-                                <Image DockPanel.Dock="Left" Source="{Binding IsSeen ,Converter={StaticResource  IsSeenConverter}}" Width="20" Margin="15,0,0,0" >
+    <Grid>
+        <ScrollViewer Style="{StaticResource  FavsScrollViewerRight}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ItemsControl  Padding="25"  HorizontalContentAlignment="Stretch" ItemsSource="{Binding Messages}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border x:Name="mainBorder" Padding="5" Style="{StaticResource trigeredBorder}" BorderThickness ="1" Height="50"   CornerRadius="6" Margin="5">
+                            <DockPanel LastChildFill="True" >
+                                <CheckBox DockPanel.Dock="Left" Command="{Binding DataContext.MailChecked ,Source={x:Reference mailListControl}}" IsChecked="{Binding IsChecked}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15,0,0,0"/>
+                                <Image DockPanel.Dock="Left" Source="{Binding Flagget ,Converter={StaticResource  MarkedConverter}}" Width="15" Margin="15,0,0,0" >
                                     <Image.InputBindings>
-                                        <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.SeenInvert ,Source={x:Reference mailListControl}}" CommandParameter="{Binding }"/>
+                                        <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.FlaggetInvert ,Source={x:Reference mailListControl}}" CommandParameter="{Binding}"/>
                                     </Image.InputBindings>
                                 </Image>
-                                <Image DockPanel.Dock="Left"  Width="20" Margin="15,0,0,0" Source="/Images/spam.png" >
+                                <Image DockPanel.Dock="Left" Source="{Binding Importance , Converter={StaticResource  ImportantConverter}}" Width="15" Margin="15,0,0,0" >
                                     <Image.InputBindings>
-                                        <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.MailToSpam ,Source={x:Reference mailListControl}}" CommandParameter="{Binding }"/>
+                                        <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.ImportanceInvert ,Source={x:Reference mailListControl}}" CommandParameter="{Binding }"/>
                                     </Image.InputBindings>
                                 </Image>
-                                <Image DockPanel.Dock="Left"  Width="20" Margin="15,0,0,0" Source="/Images/trash.png" >
-                                    <Image.InputBindings>
-                                        <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.DeleteMail ,Source={x:Reference mailListControl}}" CommandParameter="{Binding }"/>
-                                    </Image.InputBindings>
-                                </Image>
-                            </StackPanel>
-                            <Image DockPanel.Dock="Left" Source="{Binding Attachment ,Converter={StaticResource  AttachmentConverter}}" Width="25"  Margin="40,0,0,0"/>
-                            <TextBlock DockPanel.Dock="Right" Text="{Binding Message.Date}"  Margin="20,0,0,5" FontSize="14" Foreground="Gray" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        </DockPanel>
-                        <Border.InputBindings>
-                            <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.SelectMail ,Source={x:Reference mailListControl}}" CommandParameter="{Binding}"/>
-                        </Border.InputBindings>
-                     </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-         </ItemsControl>
-    </ScrollViewer>
-   
-   
+                                <TextBlock Text="{Binding Message.From}" Margin="20,0,0,5" FontSize="14" Foreground="{Binding IsSeen ,Converter={StaticResource ForegroundConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <TextBlock.InputBindings>
+                                       <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.SelectMail ,Source={x:Reference mailListControl}}" CommandParameter="{Binding}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Message.Subject}" Margin="20,0,0,5" FontSize="14" Foreground="{Binding IsSeen ,Converter={StaticResource ForegroundConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <StackPanel DockPanel.Dock="Left" Visibility="{Binding ElementName=mainBorder ,Path=IsMouseOver,Converter={StaticResource VisibilityConverter}}" Orientation="Horizontal"  Margin="20,3,0,3">
+                                    <Image DockPanel.Dock="Left" Source="{Binding IsSeen ,Converter={StaticResource  IsSeenConverter}}" Width="20" Margin="15,0,0,0" >
+                                        <Image.InputBindings>
+                                            <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.SeenInvert ,Source={x:Reference mailListControl}}" CommandParameter="{Binding }"/>
+                                        </Image.InputBindings>
+                                    </Image>
+                                    <Image DockPanel.Dock="Left"  Width="20" Margin="15,0,0,0" Source="/Images/spam.png" >
+                                        <Image.InputBindings>
+                                            <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.MailToSpam ,Source={x:Reference mailListControl}}" CommandParameter="{Binding }"/>
+                                        </Image.InputBindings>
+                                    </Image>
+                                    <Image DockPanel.Dock="Left"  Width="20" Margin="15,0,0,0" Source="/Images/trash.png" >
+                                        <Image.InputBindings>
+                                            <MouseBinding Gesture="LeftClick" Command ="{Binding DataContext.DeleteMail ,Source={x:Reference mailListControl}}" CommandParameter="{Binding }"/>
+                                        </Image.InputBindings>
+                                    </Image>
+                                </StackPanel>
+                                <Image DockPanel.Dock="Left" Source="{Binding Attachment ,Converter={StaticResource  AttachmentConverter}}" Width="25"  Margin="40,0,0,0"/>
+                                <TextBlock DockPanel.Dock="Right" Text="{Binding Message.Date}"  Margin="20,0,0,5" FontSize="14" Foreground="Gray" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </DockPanel>
+                         </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+       
+    </Grid>
+
 
 
 </UserControl>

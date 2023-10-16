@@ -22,7 +22,11 @@ namespace MailClient.ViewModels
 
         private void selectMail(object o)
         {
-
+            if (o is MessageVM message)
+            {
+                seenInvert(message);
+                MailSelected.Invoke(message);
+            }
         }
 
         private async  void seenInvert(object o)
@@ -179,6 +183,8 @@ namespace MailClient.ViewModels
             });
         }
 
+        
+
         public FolderVM CurrentFolder 
         {
            
@@ -197,6 +203,8 @@ namespace MailClient.ViewModels
         public ObservableCollection<MessageVM>? Messages => CurrentFolder.Messages;
 
         public event Action MailHasChecked;
+
+        public event Action<MessageVM> MailSelected;
 
 
         public RelayCommand SelectMail => new((o) => selectMail(o));

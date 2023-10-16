@@ -14,6 +14,8 @@
     <cf:ServiceNameToImageConverter x:Key="ServiceToImageConverter" />
     <cf:BoolToVisibilityHideConverter x:Key="BoolToVisibilityHide" />
     <cf:BoolToWindowIcon x:Key="WindowIconConverter" />
+    <cf:StringEmptyToVisibilityConverter x:Key="StringEmptyToVisibilityConverter" />
+    <cf:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
   
 
 </ResourceDictionary>

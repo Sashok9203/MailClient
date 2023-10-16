@@ -82,6 +82,8 @@
                 <TextBlock Text="Add folder" FontSize="14" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>
+
+               
         <Border x:Name="controlBorder" Margin="0,0,30,30"  Grid.Row="1" Grid.RowSpan="4" Grid.Column="1" Grid.ColumnSpan="2" Background="{StaticResource ControlBackgroundColor}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Image    Margin="0,0,30,30"  Grid.Row="1" Grid.RowSpan="4" Grid.Column="1" Grid.ColumnSpan="2" Source="{Binding Service,Converter={StaticResource ServiceToImageConverter}}" Opacity="0.3" />
         <DockPanel LastChildFill="True" Margin="0,0,30,30"  Grid.Row="1" Grid.RowSpan="4" Grid.Column="1" Grid.ColumnSpan="2">
@@ -115,7 +117,70 @@
             
         </DockPanel>
         
-        
+        <Border Margin="0,0,30,30"  Grid.Row="1" Grid.RowSpan="4" Grid.Column="1" Grid.ColumnSpan="2" Background="{StaticResource ControlBackgroundColor}" x:Name="mailViewer" Visibility="{Binding IsMailViewerWindowOpen,Converter={StaticResource BoolToVisibilityHide}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition  Height="2.5*"/>
+                    <RowDefinition />
+
+                </Grid.RowDefinitions>
+                <Image Margin="20,10,0,0"  Width="17" Source="/Images/leftarrow.png" HorizontalAlignment="Left">
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command ="{Binding MailViewerExit}"/>
+                    </Image.InputBindings>
+                </Image>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="1"  Margin="20,0,20,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Date" FontSize="17" Foreground="Gray" Margin="0,0,20,0" />
+                        <TextBlock  FontSize="17" Foreground="LightGray" Text="{Binding SelectedToViewMessage.Message.Date }"/>
+                    </StackPanel>
+                    <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="2"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="2"  Margin="20,0,20,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="To" FontSize="17" Foreground="Gray" Margin="0,0,20,0" />
+                        <TextBlock  FontSize="17" Foreground="LightGray" Text="{Binding SelectedToViewMessage.Message.To }"/>
+                    </StackPanel>
+                    <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="2"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="3"  Margin="20,0,20,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="From" FontSize="17" Foreground="Gray" Margin="0,0,20,0" />
+                        <TextBlock  FontSize="17" Foreground="LightGray" Text="{Binding SelectedToViewMessage.Message.From }"/>
+                    </StackPanel>
+                    <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="2"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="4"  Margin="20,0,20,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Subgect" FontSize="17" Foreground="Gray" Margin="0,0,20,0" />
+                        <TextBlock  FontSize="17" Foreground="LightGray" Text="{Binding SelectedToViewMessage.Message.Subject }"/>
+                    </StackPanel>
+                    <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="2"/>
+                </StackPanel>
+                <TextBox BorderThickness="0" Padding="20"  Margin="20" FontSize="15" Text="{Binding SelectedToViewMessage.Message.TextBody,Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="5" Background="Transparent"
+                         BorderBrush="Transparent" Foreground="LightGray" VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" Grid.Row="6"  Margin="20,0,20,0"
+                            Visibility="{Binding SelectedToViewMessage.Message.Attachments,Converter={StaticResource NullToVisibilityConverter}}">
+                    <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="2"/>
+                    
+                    <TextBlock Text="Attachments" FontSize="17" Foreground="Gray" Margin="0,0,20,0" />
+                    <ListView FontSize="15" Foreground="LightGray" VerticalContentAlignment="Center" HorizontalAlignment="Left" 
+                              Background="Transparent" BorderBrush="Transparent" BorderThickness="0"
+                              ItemsSource="{Binding AttachmentFiles}" SelectedItem="{Binding SlectedFileName}"/>
+
+
+
+
+                </StackPanel>
+            </Grid>
+        </Border>
+
         <Border Margin="0,0,30,30" CornerRadius="8" BorderBrush="Gray" Background="White" BorderThickness="1"  
                 Grid.Row="{Binding Row,Mode=TwoWay}" Grid.Column="{Binding Col,Mode=TwoWay}" Grid.RowSpan="4"  
                 Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"

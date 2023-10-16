@@ -26,9 +26,14 @@ namespace MailClient.ViewModels
     {
         private Dictionary<IMailFolder, FolderVM> mails = new();
         private ImapClient emailClient;
+        private MessageVM selectedToViewMessage;
         private FolderVM selectedFolder, prevFolder;
         private FolderVM? selectedParent;
-        private bool disposedValue, isNewMailWindowOpen, groupCheckEnabled, isCreateNewFolderWindoOpen;
+        private bool disposedValue,
+                     isNewMailWindowOpen, 
+                     groupCheckEnabled, 
+                     isCreateNewFolderWindoOpen,
+                     isMailViewerWindowOpen;
         private bool? gCheck = false;
         public static bool isWindowFull;
         private string newFolderName = string.Empty;
@@ -86,6 +91,13 @@ namespace MailClient.ViewModels
             });
         }
 
+        private void mailSelected(MessageVM message)
+        {
+            IsMailViewerWindowOpen = true;
+            SelectedToViewMessage = message;
+            AttachmentFiles = message.Message.Attachments.Select(x => x.ContentDisposition.FileName).ToArray();
+            OnPropertyChanged(nameof(AttachmentFiles));
+        }
 
 
         private void folderUnsubscribe(IMailFolder folder)
@@ -181,7 +193,7 @@ namespace MailClient.ViewModels
         {
             groupCheck = false;
             GroupCheck = GroupCheckEnabled = false;
-
+            IsMailViewerWindowOpen = false;
             if (mails[path].Messages == null || forceReload)
             {
                 mails[path].Messages = new();
@@ -477,6 +489,15 @@ namespace MailClient.ViewModels
             }
         }
 
+        public bool IsMailViewerWindowOpen
+        {
+            get => isMailViewerWindowOpen;
+            set
+            {
+                isMailViewerWindowOpen = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool IsWindowFull
         {
@@ -505,7 +526,8 @@ namespace MailClient.ViewModels
 
         public bool GroupCheckEnabled
         {
-            get => groupCheckEnabled;
+            get =>  groupCheckEnabled;
+        
             set 
             {
                 groupCheckEnabled = value;
@@ -535,7 +557,17 @@ namespace MailClient.ViewModels
             }
         }
 
-
+        public MessageVM SelectedToViewMessage
+        {
+            get => selectedToViewMessage;
+            set 
+            {
+                selectedToViewMessage = value;
+                OnPropertyChanged();
+            }
+        }
+    
+        public IEnumerable<string> AttachmentFiles { get; set; }
 
 
         public RelayCommand SelectFolder => new(async (o)=> await selectFolderAsync(o),(o)=> CurrentControl != UserControls.WaitLoadControl);
@@ -551,13 +583,14 @@ namespace MailClient.ViewModels
         public RelayCommand DeleteFolder => new((o) => deleteFolder(o), (o) => o is FolderVM folder && folder != SelectedFolder && folder.LocalName == LocalFolder.User);
         public RelayCommand DeleteMessages => new(async (o) =>await deleteMessages(), (o) => GroupCheck != false);
         public RelayCommand MoveMessagesToSpam => new(async (o) => await moveMessagesToSpam(), (o) => GroupCheck != false && SelectedFolder.LocalName != LocalFolder.Junk);
-
+        public RelayCommand MailViewerExit => new((o) => IsMailViewerWindowOpen = false);
         public MailClientControlVM()
         {
             UserControls.WaitLoadControl.LoadingText = "Loading messages...";
             UserControls.WaitLoadControl.TextColor = Brushes.White;
             UserControls.MailListControl.MailsBox = mails;
             UserControls.MailListControl.MailHasChecked += mailChecked;
+            UserControls.MailListControl.MailSelected += mailSelected;
         }
 
         protected virtual void Dispose(bool disposing)

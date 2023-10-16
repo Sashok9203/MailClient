@@ -8,9 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\download_file.png" />
     <None Remove="Images\drafts.png" />
     <None Remove="Images\hiclipart.com.png" />
     <None Remove="Images\left-arrow.png" />
+    <None Remove="Images\leftarrow.png" />
     <None Remove="Images\loading-gif.gif" />
     <None Remove="Images\move_cloudfolder.png" />
     <None Remove="Images\of_exitf.png" />
@@ -22,6 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\download_file.png" />
+    <Resource Include="Images\leftarrow.png" />
     <Resource Include="Images\move_cloudfolder.png" />
     <Resource Include="Images\of_exitf.png" />
     <Resource Include="Images\reload.png" />
