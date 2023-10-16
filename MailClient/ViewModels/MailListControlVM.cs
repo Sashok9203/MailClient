@@ -24,6 +24,7 @@ namespace MailClient.ViewModels
         {
             if (o is MessageVM message)
             {
+                if (!CurrentFolder.Folder.IsOpen) CurrentFolder.Folder.Open( FolderAccess.ReadWrite);
                 CurrentFolder.Folder.AddFlags(message.UniqueId,  MessageFlags.Seen,false);
                 message.IsSeen = true;
                 foreach (var item in MailsBox.Values)

@@ -256,7 +256,9 @@ namespace MailClient.ViewModels
                     mVM.IsSeen = info[0]?.Flags.Value.HasFlag(MessageFlags.Seen) ?? false;
                     mVM.Flagget = info[0]?.Flags.Value.HasFlag(MessageFlags.Flagged) ?? false;
                     mVM.Importance = info[0].GMailLabels?.Contains("Important") ?? false;
-
+                    //mVM.Importance = mVM.Message.Priority == MessagePriority.Urgent;
+                    //mVM.Importance = mVM.Message.Importance ==  MessageImportance.High;
+                    //mVM.Importance = mVM.Message.XPriority ==  XMessagePriority.Highest;
                     mVM.UniqueId = id;
                     mVM.Attachment = mVM.Message.Attachments.Any();
                     mails[path].Messages?.Add(mVM);
@@ -620,8 +622,12 @@ namespace MailClient.ViewModels
                 OnPropertyChanged();
             }
         }
+
         public string NewMessageSubject { get; set; }
+
         public string NewMessageMessage { get; set; }
+
+        public string EmailAddress { get; set; }
 
         public MessageVM SelectedToViewMessage
         {

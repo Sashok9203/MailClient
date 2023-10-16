@@ -48,6 +48,8 @@ namespace MailClient.ViewModels
                     ConfigUtility.AddUpdateAppSettings("Password", password);
                     ConfigUtility.AddUpdateAppSettings("CurrentService", service.ToString());
                     ConfigUtility.LockSection("appSettings");
+                    UserControls.MailClientControl.EmailAddress = email;
+
                     LoadingStart?.Invoke();
                 }
             }

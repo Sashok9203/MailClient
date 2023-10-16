@@ -30,13 +30,17 @@
 
         
         <Border  Grid.RowSpan="5" Grid.ColumnSpan="3" Background="{StaticResource FolderBackgroundColor}"/>
-
-        <Image  HorizontalAlignment="Left" Width="30" Margin="20,0,0,0"  Source="/Images/sign-out.png"  >
-            <Image.InputBindings>
-                <MouseBinding Gesture="LeftClick" Command ="{Binding Logout}"/>
-            </Image.InputBindings>
-        </Image>
-        <Image Grid.Column="2" Width="30" HorizontalAlignment="Right" Margin="0,0,20,0"  Source="/Images/of_exitf.png"  >
+        <Border Grid.ColumnSpan="2" Height="40"  CornerRadius="8" Padding="5" Margin="20,0,0,0" HorizontalAlignment="Left" Background="{StaticResource ControlBackgroundColor}">
+            <StackPanel Orientation="Horizontal" >
+                <Image VerticalAlignment="Center"  Width="25" Margin="0,0,10,0"  Source="/Images/sign-out.png"  >
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command ="{Binding Logout}"/>
+                    </Image.InputBindings>
+                </Image>
+                <TextBlock VerticalAlignment="Center" Text="{Binding EmailAddress}" FontSize="16" Foreground="White"/>
+            </StackPanel>
+        </Border>
+        <Image Grid.Column="2" Width="25" HorizontalAlignment="Right" Margin="0,0,20,0"  Source="/Images/of_exitf.png"  >
             <Image.InputBindings>
                 <MouseBinding Gesture="LeftClick" Command ="{Binding  Exit}"/>
             </Image.InputBindings>
@@ -125,8 +129,8 @@
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
-                    <RowDefinition  Height="2.5*"/>
                     <RowDefinition />
+                    <RowDefinition Height ="Auto"/>
                     <RowDefinition  Height="60"/>
 
                 </Grid.RowDefinitions>
@@ -229,14 +233,14 @@
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="1"  Margin="20,0,20,0">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="To" FontSize="17" Foreground="Gray" Margin="0,0,20,0" />
-                        <TextBox Width="350" Text="{Binding NewMessageTo,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  BorderBrush="Transparent" BorderThickness="0" FontSize="17"  />
+                        <TextBox Width="700" Text="{Binding NewMessageTo,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  BorderBrush="Transparent" BorderThickness="0" FontSize="17"  />
                     </StackPanel>
                     <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="2"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="2"  Margin="20,0,20,0">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Subgect" FontSize="17" Foreground="Gray" Margin="0,0,20,0" />
-                        <TextBox  Width="350" Text="{Binding NewMessageSubject,UpdateSourceTrigger=PropertyChanged}"  BorderBrush="Transparent" BorderThickness="0"  FontSize="17" />
+                        <TextBox  Width="700" Text="{Binding NewMessageSubject,UpdateSourceTrigger=PropertyChanged}"  BorderBrush="Transparent" BorderThickness="0"  FontSize="17" />
                     </StackPanel>
                     <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Height="2"/>
                 </StackPanel>
