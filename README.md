@@ -1,4 +1,4 @@
-# MailClient
+# MailClient (not completed)
 
 ![image](https://github.com/Sashok9203/MailClient/assets/56803757/eef811c6-7434-4cfd-bae2-919b459b65c4)
 
