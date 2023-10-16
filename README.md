@@ -8,5 +8,9 @@
 
 ![image](https://github.com/Sashok9203/MailClient/assets/56803757/3de8b756-36f0-443a-9939-963f1e42dc13)
 
+![image](https://github.com/Sashok9203/MailClient/assets/56803757/42a122f0-fbc5-4f02-b224-0f7825e32f01)
+
+![image](https://github.com/Sashok9203/MailClient/assets/56803757/27e717c2-880b-4e1d-b161-255b989c2d7a)
+
 
 
